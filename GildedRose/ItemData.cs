@@ -18,23 +18,32 @@ namespace GildedRose
         public const int MaxQuality = 50;
         public const int MinQuality = 0;
 
-        public static readonly Dictionary<string, Func<Item, int>> ItemBaseQualityDegrateRates =
+        //Function should return the difference in quality per day elapse before sell-by date
+        public static readonly Dictionary<string, Func<Item, int>> ItemBaseQualityDegradeRates =
             new Dictionary<string, Func<Item, int>>
             {
                 {"Aged Brie", (x) => 1},
                 {"Backstage passes to a TAFKAL80ETC concert", (x) => PassBaseQualityDecay(x)}
             };
 
-        public static readonly Dictionary<string, Func<Item, int>> ItemAdditionalQualityDegrateRates =
+        //Function should return the ADDITIONAL difference in quality per day elapse after sell-by date
+        public static readonly Dictionary<string, Func<Item, int>> ItemAdditionalQualityDegradeRates =
             new Dictionary<string, Func<Item, int>>
             {
                 {"Aged Brie", (x) => 1},
                 {"Backstage passes to a TAFKAL80ETC concert", (x) => -x.Quality}
             };
 
-        public static bool IsLegendary(Item item)
+        //Function takes the standard decay rate and modies it somehow
+        public static readonly Dictionary<string, Func<int, int>> ItemModifierDegradeEffects =
+            new Dictionary<string, Func<int, int>>
+            {
+                {"Conjured", (x) => x * 2}
+            };
+
+        public static bool IsLegendary(string itemName)
         {
-            return LegendaryItems.Contains(item.Name);
+            return LegendaryItems.Contains(itemName);
         }
 
         private static int PassBaseQualityDecay(Item item)

@@ -21,29 +21,40 @@ namespace GildedRose
 
         private void UpdateItemQuality(Item item)
         {
-            if (!ItemData.IsLegendary(item))
+            ItemNameParser nameParser = new ItemNameParser(item);
+
+            if (!ItemData.IsLegendary(nameParser.GetItemName()))
             {
-                BaseItemQualityDegrade(item);
+                StepQualityAndClamp(item, BaseItemQualityDegrade(item, nameParser));
 
                 DegradeItemSellBy(item);
 
                 if (HasGoneBad(item))
                 {
-                    AdditionalItemQualityDegrade(item);
+                    StepQualityAndClamp(item, AdditionalItemQualityDegrade(item, nameParser));
                 }
             }
         }
 
-        private void BaseItemQualityDegrade(Item item)
+        private int BaseItemQualityDegrade(Item item, ItemNameParser nameParser)
         {
-            if (ItemData.ItemBaseQualityDegrateRates.ContainsKey(item.Name))
+            int decay = 0;
+ 
+            if (ItemData.ItemBaseQualityDegradeRates.ContainsKey(nameParser.GetItemName()))
             {
-                StepQualityAndClamp(item, ItemData.ItemBaseQualityDegrateRates[item.Name](item));
+                decay = ItemData.ItemBaseQualityDegradeRates[nameParser.GetItemName()](item);
             }
             else
             {
-                StepQualityAndClamp(item, -1);
+                decay = -1;
             }
+
+            if (nameParser.HasModifier())
+            {
+                decay = ItemData.ItemModifierDegradeEffects[nameParser.GetModifier()](decay);
+            }
+
+            return decay;
         }
 
         private void DegradeItemSellBy(Item item)
@@ -56,16 +67,25 @@ namespace GildedRose
             return (item.SellIn < 0);
         }
 
-        private void AdditionalItemQualityDegrade(Item item)
+        private int AdditionalItemQualityDegrade(Item item, ItemNameParser nameParser)
         {
-            if (ItemData.ItemAdditionalQualityDegrateRates.ContainsKey(item.Name))
+            int decay = 0;
+
+            if (ItemData.ItemAdditionalQualityDegradeRates.ContainsKey(nameParser.GetItemName()))
             {
-                StepQualityAndClamp(item, ItemData.ItemAdditionalQualityDegrateRates[item.Name](item));
+                decay = ItemData.ItemAdditionalQualityDegradeRates[nameParser.GetItemName()](item);
             }
             else
             {
-                StepQualityAndClamp(item, -1);
+                decay = -1;
             }
+
+            if (nameParser.HasModifier())
+            {
+                decay = ItemData.ItemModifierDegradeEffects[nameParser.GetModifier()](decay);
+            }
+
+            return decay;
         }
 
         private void StepQualityAndClamp(Item item, int deltaQuality)
