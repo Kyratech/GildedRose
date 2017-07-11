@@ -36,12 +36,13 @@ namespace GildedRose
 
         private void BaseItemQualityDegrade(Item item)
         {
-            if (ItemData.IsAnItemThatIncreasesInQuality(item))
+            switch (item.Name)
             {
-                StepQualityAndClamp(item, 1);
-
-                if (item.Name == "Backstage passes to a TAFKAL80ETC concert")
-                {
+                case "Aged Brie":
+                    StepQualityAndClamp(item, 1);
+                    break;
+                case "Backstage passes to a TAFKAL80ETC concert":
+                    StepQualityAndClamp(item, 1);
                     if (item.SellIn < 11)
                     {
                         StepQualityAndClamp(item, 1);
@@ -51,11 +52,10 @@ namespace GildedRose
                     {
                         StepQualityAndClamp(item, 1);
                     }
-                }
-            }
-            else
-            {
-                StepQualityAndClamp(item, -1);
+                    break;
+                default:
+                    StepQualityAndClamp(item, -1);
+                    break;
             }
         }
 
@@ -71,20 +71,17 @@ namespace GildedRose
 
         private void AdditionalItemQualityDegrade(Item item)
         {
-            if (item.Name != "Aged Brie")
+            switch (item.Name)
             {
-                if (item.Name != "Backstage passes to a TAFKAL80ETC concert")
-                {
+                case "Aged Brie":
+                    StepQualityAndClamp(item, 1);
+                    break;
+                case "Backstage passes to a TAFKAL80ETC concert":
+                    item.Quality = 0;
+                    break;
+                default:
                     StepQualityAndClamp(item, -1);
-                }
-                else
-                {
-                    item.Quality = item.Quality - item.Quality;
-                }
-            }
-            else
-            {
-                StepQualityAndClamp(item, 1);
+                    break;
             }
         }
 
