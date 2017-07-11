@@ -78,5 +78,37 @@ namespace GildedRose
             app.UpdateQuality();
             Assert.AreEqual(0, items[0].Quality);
         }
+
+        [Test()]
+        public void AgedBrieIncreasesQuality()
+        {
+            Item brieItem = new Item { Name = "Aged Brie", SellIn = 10, Quality = 10 };
+            IList<Item> items = new List<Item> { brieItem };
+
+            GildedRose app = new GildedRose(items);
+
+            Assert.AreEqual(10, items[0].Quality);
+            app.UpdateQuality();
+            Assert.AreEqual(11, items[0].Quality);
+            app.UpdateQuality();
+            Assert.AreEqual(12, items[0].Quality);
+        }
+
+        [Test()]
+        public void AgedBrieIncreasesFasterAffterSellByDate()
+        {
+            Item brieItem = new Item { Name = "Aged Brie", SellIn = 1, Quality = 10 };
+            IList<Item> items = new List<Item> { brieItem };
+
+            GildedRose app = new GildedRose(items);
+
+            Assert.AreEqual(10, items[0].Quality);
+            app.UpdateQuality();
+            Assert.AreEqual(11, items[0].Quality);
+            app.UpdateQuality();
+            Assert.AreEqual(13, items[0].Quality);
+            app.UpdateQuality();
+            Assert.AreEqual(15, items[0].Quality);
+        }
     }
 }
