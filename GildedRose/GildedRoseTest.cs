@@ -127,5 +127,39 @@ namespace GildedRose
             app.UpdateQuality();
             Assert.AreEqual(50, items[0].Quality);
         }
+
+        [Test()]
+        public void SulfurasSellByNeverDegrades()
+        {
+            Item legendItem = new Item { Name = "Sulfuras, Hand of Ragnaros", SellIn = 10, Quality = 10 };
+            IList<Item> items = new List<Item> { legendItem };
+
+            GildedRose app = new GildedRose(items);
+
+            Assert.AreEqual(10, items[0].SellIn);
+            app.UpdateQuality();
+            Assert.AreEqual(10, items[0].SellIn);
+            app.UpdateQuality();
+            Assert.AreEqual(10, items[0].SellIn);
+            app.UpdateQuality();
+            Assert.AreEqual(10, items[0].SellIn);
+        }
+
+        [Test()]
+        public void SulfurasQualityNeverDegrades()
+        {
+            Item legendItem = new Item { Name = "Sulfuras, Hand of Ragnaros", SellIn = 10, Quality = 10 };
+            IList<Item> items = new List<Item> { legendItem };
+
+            GildedRose app = new GildedRose(items);
+
+            Assert.AreEqual(10, items[0].Quality);
+            app.UpdateQuality();
+            Assert.AreEqual(10, items[0].Quality);
+            app.UpdateQuality();
+            Assert.AreEqual(10, items[0].Quality);
+            app.UpdateQuality();
+            Assert.AreEqual(10, items[0].Quality);
+        }
     }
 }
