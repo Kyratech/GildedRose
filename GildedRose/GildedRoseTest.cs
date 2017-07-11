@@ -110,5 +110,22 @@ namespace GildedRose
             app.UpdateQuality();
             Assert.AreEqual(15, items[0].Quality);
         }
+
+        [Test()]
+        public void QualityIsNeverMoreThan50()
+        {
+            Item brieItem = new Item { Name = "Aged Brie", SellIn = 10, Quality = 49 };
+            IList<Item> items = new List<Item> { brieItem };
+
+            GildedRose app = new GildedRose(items);
+
+            Assert.AreEqual(49, items[0].Quality);
+            app.UpdateQuality();
+            Assert.AreEqual(50, items[0].Quality);
+            app.UpdateQuality();
+            Assert.AreEqual(50, items[0].Quality);
+            app.UpdateQuality();
+            Assert.AreEqual(50, items[0].Quality);
+        }
     }
 }
