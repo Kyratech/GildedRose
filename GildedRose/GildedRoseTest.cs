@@ -29,5 +29,20 @@ namespace GildedRose
             app.UpdateQuality();
             Assert.AreEqual(8, items[0].SellIn);
         }
+
+        [Test()]
+        public void QualityDegrades()
+        {
+            Item testItem = new Item { Name = "test", SellIn = 10, Quality = 10 };
+            IList<Item> items = new List<Item> { testItem };
+
+            GildedRose app = new GildedRose(items);
+
+            Assert.AreEqual(10, items[0].Quality);
+            app.UpdateQuality();
+            Assert.AreEqual(9, items[0].Quality);
+            app.UpdateQuality();
+            Assert.AreEqual(8, items[0].Quality);
+        }
     }
 }
