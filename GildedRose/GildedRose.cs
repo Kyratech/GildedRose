@@ -21,7 +21,7 @@ namespace GildedRose
 
         private void UpdateItemQuality(Item item)
         {
-            if (!ItemData.IsAnItemWithUnchangingQuality(item))
+            if (!ItemData.IsLegendary(item))
             {
                 BaseItemQualityDegrade(item);
 

@@ -10,7 +10,7 @@ namespace GildedRose
 {
     class ItemData
     {
-        public static readonly IList<string> ItemsWithUnchangingQuality = new ReadOnlyCollection<string>(new List<string>
+        public static readonly IList<string> LegendaryItems = new ReadOnlyCollection<string>(new List<string>
         {
             "Sulfuras, Hand of Ragnaros"
         });
@@ -18,9 +18,9 @@ namespace GildedRose
         public const int MaxQuality = 50;
         public const int MinQuality = 0;
 
-        public static bool IsAnItemWithUnchangingQuality(Item item)
+        public static bool IsLegendary(Item item)
         {
-            return ItemsWithUnchangingQuality.Contains(item.Name);
+            return LegendaryItems.Contains(item.Name);
         }
     }
 }
