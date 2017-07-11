@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace GildedRose
 {
@@ -34,27 +35,18 @@ namespace GildedRose
         {
             if (ItemData.IsAnItemThatIncreasesInQuality(item))
             {
-                if (item.Quality < 50)
+                StepQualityAndClamp(item, 1);
+
+                if (item.Name == "Backstage passes to a TAFKAL80ETC concert")
                 {
-                    item.Quality = item.Quality + 1;
-
-                    if (item.Name == "Backstage passes to a TAFKAL80ETC concert")
+                    if (item.SellIn < 11)
                     {
-                        if (item.SellIn < 11)
-                        {
-                            if (item.Quality < 50)
-                            {
-                                item.Quality = item.Quality + 1;
-                            }
-                        }
+                        StepQualityAndClamp(item, 1);
+                    }
 
-                        if (item.SellIn < 6)
-                        {
-                            if (item.Quality < 50)
-                            {
-                                item.Quality = item.Quality + 1;
-                            }
-                        }
+                    if (item.SellIn < 6)
+                    {
+                        StepQualityAndClamp(item, 1);
                     }
                 }
             }
@@ -64,7 +56,7 @@ namespace GildedRose
                 {
                     if (!ItemData.IsAnItemWithUnchangingQuality(item))
                     {
-                        item.Quality = item.Quality - 1;
+                        StepQualityAndClamp(item, -1);
                     }
                 }
             }
@@ -72,7 +64,7 @@ namespace GildedRose
 
         private void DegradeItemSellBy(Item item)
         {
-            if (item.Name != "Sulfuras, Hand of Ragnaros")
+            if (!ItemData.IsAnItemWithUnchangingQuality(item))
             {
                 item.SellIn = item.SellIn - 1;
             }
@@ -89,12 +81,9 @@ namespace GildedRose
             {
                 if (item.Name != "Backstage passes to a TAFKAL80ETC concert")
                 {
-                    if (item.Quality > 0)
+                    if (!ItemData.IsAnItemWithUnchangingQuality(item))
                     {
-                        if (item.Name != "Sulfuras, Hand of Ragnaros")
-                        {
-                            item.Quality = item.Quality - 1;
-                        }
+                        StepQualityAndClamp(item, -1);
                     }
                 }
                 else
@@ -104,10 +93,28 @@ namespace GildedRose
             }
             else
             {
-                if (item.Quality < 50)
-                {
-                    item.Quality = item.Quality + 1;
-                }
+                StepQualityAndClamp(item, 1);
+            }
+        }
+
+        private void StepQualityAndClamp(Item item, int deltaQuality)
+        {
+            item.Quality = ClampQuality(item.Quality + deltaQuality);
+        }
+
+        private int ClampQuality(int quality)
+        {
+            if (quality < ItemData.MinQuality)
+            {
+                return ItemData.MinQuality;
+            }
+            else if (quality > ItemData.MaxQuality)
+            {
+                return ItemData.MaxQuality;
+            }
+            else
+            {
+                return quality;
             }
         }
     }

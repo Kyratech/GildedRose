@@ -21,6 +21,9 @@ namespace GildedRose
             "Sulfuras, Hand of Ragnaros"
         });
 
+        public const int MaxQuality = 50;
+        public const int MinQuality = 0;
+
         public static bool IsAnItemThatIncreasesInQuality(Item item)
         {
             return ItemsThatIncreaseInQuality.Contains(item.Name);
