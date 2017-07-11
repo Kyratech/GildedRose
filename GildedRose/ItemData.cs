@@ -18,6 +18,8 @@ namespace GildedRose
         public const int MaxQuality = 50;
         public const int MinQuality = 0;
 
+        public const int DefaultQualityDecay = -1;
+
         //Function should return the difference in quality per day elapse before sell-by date
         public static readonly Dictionary<string, Func<Item, int>> ItemBaseQualityDegradeRates =
             new Dictionary<string, Func<Item, int>>
@@ -41,9 +43,9 @@ namespace GildedRose
                 {"Conjured", (x) => x * 2}
             };
 
-        public static bool IsLegendary(string itemName)
+        public static bool IsNotLegendary(string itemName)
         {
-            return LegendaryItems.Contains(itemName);
+            return !LegendaryItems.Contains(itemName);
         }
 
         private static int PassBaseQualityDecay(Item item)

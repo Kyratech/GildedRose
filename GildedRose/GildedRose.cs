@@ -23,7 +23,7 @@ namespace GildedRose
         {
             ItemNameParser nameParser = new ItemNameParser(item);
 
-            if (!ItemData.IsLegendary(nameParser.GetItemName()))
+            if (ItemData.IsNotLegendary(nameParser.GetItemName()))
             {
                 int baseDecay = BaseItemQualityDegrade(item, nameParser);
                 StepQualityAndClamp(item, baseDecay);
@@ -48,7 +48,7 @@ namespace GildedRose
             }
             else
             {
-                decay = -1;
+                decay = ItemData.DefaultQualityDecay;
             }
 
             decay = ApplyModifierIfNecessary(decay, nameParser);
@@ -81,7 +81,7 @@ namespace GildedRose
             }
             else
             {
-                decay = -1;
+                decay = ItemData.DefaultQualityDecay;
             }
 
             decay = ApplyModifierIfNecessary(decay, nameParser);

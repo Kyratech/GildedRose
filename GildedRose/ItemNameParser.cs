@@ -15,8 +15,7 @@ namespace GildedRose
 
         public ItemNameParser(Item item)
         {
-            int firstSpaceIndex = item.Name.IndexOf(" ");
-            string firstWord = firstSpaceIndex > -1 ? item.Name.Substring(0, firstSpaceIndex) : item.Name;
+            string firstWord = GetFirstWord(item.Name);
 
             if (ItemData.ItemModifierDegradeEffects.ContainsKey(firstWord))
             {
@@ -29,6 +28,20 @@ namespace GildedRose
                 hasModifier = false;
                 modifier = "";
                 itemName = item.Name;
+            }
+        }
+
+        private string GetFirstWord(string itemName)
+        {
+            int firstSpaceIndex = itemName.IndexOf(" ");
+
+            if (firstSpaceIndex > -1)
+            {
+                return itemName.Substring(0, firstSpaceIndex);
+            }
+            else
+            {
+                return itemName;
             }
         }
 
