@@ -25,13 +25,15 @@ namespace GildedRose
 
             if (!ItemData.IsLegendary(nameParser.GetItemName()))
             {
-                StepQualityAndClamp(item, BaseItemQualityDegrade(item, nameParser));
+                int baseDecay = BaseItemQualityDegrade(item, nameParser);
+                StepQualityAndClamp(item, baseDecay);
 
                 DegradeItemSellBy(item);
 
                 if (HasGoneBad(item))
                 {
-                    StepQualityAndClamp(item, AdditionalItemQualityDegrade(item, nameParser));
+                    int additionalDecay = AdditionalItemQualityDegrade(item, nameParser);
+                    StepQualityAndClamp(item, additionalDecay);
                 }
             }
         }
@@ -49,12 +51,14 @@ namespace GildedRose
                 decay = -1;
             }
 
-            if (nameParser.HasModifier())
-            {
-                decay = ItemData.ItemModifierDegradeEffects[nameParser.GetModifier()](decay);
-            }
+            decay = ApplyModifierIfNecessary(decay, nameParser);
 
             return decay;
+        }
+
+        private void StepQualityAndClamp(Item item, int deltaQuality)
+        {
+            item.Quality = ClampQuality(item.Quality + deltaQuality);
         }
 
         private void DegradeItemSellBy(Item item)
@@ -80,17 +84,21 @@ namespace GildedRose
                 decay = -1;
             }
 
-            if (nameParser.HasModifier())
-            {
-                decay = ItemData.ItemModifierDegradeEffects[nameParser.GetModifier()](decay);
-            }
+            decay = ApplyModifierIfNecessary(decay, nameParser);
 
             return decay;
         }
 
-        private void StepQualityAndClamp(Item item, int deltaQuality)
+        private int ApplyModifierIfNecessary(int decay, ItemNameParser nameParser)
         {
-            item.Quality = ClampQuality(item.Quality + deltaQuality);
+            if (nameParser.HasModifier())
+            {
+                return ItemData.ItemModifierDegradeEffects[nameParser.GetModifier()](decay);
+            }
+            else
+            {
+                return decay;
+            }
         }
 
         private int ClampQuality(int quality)
