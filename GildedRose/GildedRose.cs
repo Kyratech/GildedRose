@@ -21,13 +21,16 @@ namespace GildedRose
 
         private void UpdateItemQuality(Item item)
         {
-            BaseItemQualityDegrade(item);
-
-            DegradeItemSellBy(item);
-
-            if (HasGoneBad(item))
+            if (!ItemData.IsAnItemWithUnchangingQuality(item))
             {
-                AdditionalItemQualityDegrade(item);
+                BaseItemQualityDegrade(item);
+
+                DegradeItemSellBy(item);
+
+                if (HasGoneBad(item))
+                {
+                    AdditionalItemQualityDegrade(item);
+                }
             }
         }
 
@@ -52,22 +55,13 @@ namespace GildedRose
             }
             else
             {
-                if (item.Quality > 0)
-                {
-                    if (!ItemData.IsAnItemWithUnchangingQuality(item))
-                    {
-                        StepQualityAndClamp(item, -1);
-                    }
-                }
+                StepQualityAndClamp(item, -1);
             }
         }
 
         private void DegradeItemSellBy(Item item)
         {
-            if (!ItemData.IsAnItemWithUnchangingQuality(item))
-            {
-                item.SellIn = item.SellIn - 1;
-            }
+            item.SellIn = item.SellIn - 1;
         }
 
         private bool HasGoneBad(Item item)
@@ -81,10 +75,7 @@ namespace GildedRose
             {
                 if (item.Name != "Backstage passes to a TAFKAL80ETC concert")
                 {
-                    if (!ItemData.IsAnItemWithUnchangingQuality(item))
-                    {
-                        StepQualityAndClamp(item, -1);
-                    }
+                    StepQualityAndClamp(item, -1);
                 }
                 else
                 {
